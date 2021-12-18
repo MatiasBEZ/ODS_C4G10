@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- templates/search_results.html -->
+<h1>Resultados de la Busqueda</h1>
+
+<form>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputEmail4">Titulo</label>
+      <input type="search" class="form-control" name="titulo_search" id="inputEmail4">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputPassword4">Fecha Min</label>
+      <input type="date" class="form-control" name="fecha_min" id="inputPassword4" >
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputPassword5">Fecha Max</label>
+      <input type="date" class="form-control" name="fecha_max" id="inputPassword5" >
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-4">
+      <label for="inputState">Categoria</label>
+      <select id="inputState" class="form-control" name="category_search">
+        <option selected>Elegir...</option>
+        {% for cate in categories %}
+        <option value= "{{ cate }}" >{{ cate }}</option>
+        {% endfor %}
+      </select>
+    </div>  
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-4">
+      <label for="inputState">Ordenar por...</label>
+      <select id="inputState2" class="form-control" name="order_search">
+        <option selected>mas recientes</option>
+        <option selected>mas antiguos</option>
+        <option selected>mas comentados</option>
+      </select>
+    </div>  
+  </div>
+
+  <br/>
+  <button type="submit" class="btn btn-primary" href="{% url 'search_results' %}">Buscar</button>
+</form>
+
+
+
+
+
+
+
+
+<ul>
+{% for post in queryset %}
+  {% if post.estado == "a" or user.id == post.author.id %}
+  <li>
+    <a href="{% url 'article-detail' post.pk %}">{{post.title}}</a>
+
+     - <a href="{% url 'category' post.category %}">{{ post.category }}</a>
+     - {{post.author.first_name}}
+    {{post.author.last_name}} - {{post.post_date}}  
+
+    {% if user.is_authenticated %}
+      {% if user.id == post.author.id or user.is_superuser %}
+        -<a href="{% url 'update_post' post.pk %}">(Edit)</a> 
+        <a href="{% url 'delete_post' post.pk %}">(Delete)</a>
+      {% endif %}
+    {% endif %}
+      <br/>
+    {{ post.snippet }}
+    <br/>
+    {% if not post.comments.all %}
+      NO hay comentarios
+    {% else %}
+        <br/><br/>
+        {% for comment in post.comments.all %}
+          <strong>
+            {{comment.author}} - 
+            {{comment.date_added}}
+          </strong>
+          <br/>
+          {{ comment.body }}
+          <br/><br/>
+          
+        {% endfor %}
+    {% endif%}
+
+  </li>
+  {% endif %}
+{% endfor %}
+</ul>
+
+{% endblock %}
