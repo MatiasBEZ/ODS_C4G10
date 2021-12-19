@@ -11,8 +11,8 @@
 	{{post.author.last_name}} - {{post.post_date}} 
 	{% if user.is_authenticated %}
 		{% if user.id == post.author.id or user.is_superuser or user.tipousuario.tipo == "admin"%}
-		- <a href="{% url 'update_post' post.pk %}">(Edit)</a>
-		<a href="{% url 'delete_post' post.pk %}">(Delete)</a>
+		- <a class="btn btn-outline-warning" href="{% url 'update_post' post.pk %}">Editar</a>
+      <a class="btn btn-outline-danger" href="{% url 'delete_post' post.pk %}">Borrar</a>
 		{% endif%}
 	{% endif %}
 </small><br/>
@@ -45,7 +45,7 @@
 			{{post.author.last_name}}
         </h5>
         <p class="small text-muted">
-        	<a href="{% url 'show_profile_page' post.author.profile.id %}">Profile Page</a>
+        	<a href="{% url 'show_profile_page' post.author.profile.id %}">Pagina de Perfil</a>
         	{% if post.author.profile.website_url%}
         	<a href="{{ post.author.profile.website_url}}">Youtube</a>
         	{% endif %}
@@ -63,9 +63,9 @@
 <br/>
 {% if not post.comments.all %}
 No hay comentarios que mostrar...
-<a href="{% url 'add_comment' post.pk %}">Add Comment</a>
+<a href="{% url 'add_comment' post.pk %}">Agregar un comentario...</a>
 {% else%}
-<a href="{% url 'add_comment' post.pk %}">Add Comment</a>
+<a href="{% url 'add_comment' post.pk %}">Agregar un comentario...</a>
 <br/><br/>
   {% for comment in post.comments.all %}
     <strong>
