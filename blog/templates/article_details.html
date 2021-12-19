@@ -19,7 +19,7 @@
 <hr>
 <br/>
 {% if post.header_image %}
-<img src="{{ post.header_image.url }}" class="img-fluid">
+<img src="{{ post.header_image.url }}" class="img-fluid" style="max-height: 500px; min-width: 1100px;">
 {% endif %}
 <br/><br/>
 {{post.body|safe}}
@@ -79,6 +79,7 @@ No hay comentarios que mostrar...
   {% endfor %}
 {% endif %}
 <hr>
+<br/><br/>
 
 
 {% endblock %}
